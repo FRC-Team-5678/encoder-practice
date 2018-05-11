@@ -14,7 +14,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team5678.robot.commands.ExampleCommand;
 import org.usfirst.frc.team5678.robot.subsystems.ExampleSubsystem;
-
+import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.drive.*;
+import edu.wpi.first.wpilibj.smartdashboard.*;
+import edu.wpi.first.wpilibj.CameraServer;
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the TimedRobot
@@ -28,6 +31,18 @@ public class Robot extends TimedRobot {
 
 	Command m_autonomousCommand;
 	SendableChooser<Command> m_chooser = new SendableChooser<>();
+	//varables
+	
+	//motor
+	Spark L1 = new Spark(0);
+	Spark R1 = new Spark(1);
+	
+	//drive setup
+	DifferentialDrive myRobot = new DifferentialDrive(L1, R1);
+	
+	//joystick
+	Joystick stick1 = new Joystick(0);
+	
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -94,10 +109,7 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void teleopInit() {
-		// This makes sure that the autonomous stops running when
-		// teleop starts running. If you want the autonomous to
-		// continue until interrupted by another command, remove
-		// this line or comment it out.
+		myRobot.setSafetyEnabled(false);
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.cancel();
 		}
@@ -109,6 +121,8 @@ public class Robot extends TimedRobot {
 	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
+		myRobot.arcadeDrive(stick1.getY(), stick1.getZ());
+		
 	}
 
 	/**
